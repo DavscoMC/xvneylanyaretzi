@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación XV Años Neylan Jaqueline</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Montserrat:wght@300;400;600&display=swap');
+        
+        .dancing-script {
+            font-family: 'Dancing Script', cursive;
+        }
+        
+        .montserrat {
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .card {
+            box-shadow: 0 10px 30px rgba(233, 182, 203, 0.5);
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(233, 182, 203, 0.7);
+        }
+        
+        .floral-border {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23f8c8dc" d="M50,0 C60,20 80,20 100,30 C80,40 80,60 50,100 C20,60 20,40 0,30 C20,20 40,20 50,0 Z"/></svg>');
+            background-size: 60px 60px;
+            background-repeat: repeat;
+            opacity: 0.1;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: #f8c8dc;
+            opacity: 0.7;
+            animation: fall 5s linear infinite;
+        }
+        
+        @keyframes fall {
+            0% { transform: translateY(-100px) rotate(0deg); }
+            100% { transform: translateY(100vh) rotate(360deg); }
+        }
+        
+        .envelope {
+            position: relative;
+            background: #fff9fc;
+            border: 1px solid #f8c8dc;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            border-top: 80px solid #fce4ed;
+            border-left: 80px solid transparent;
+            width: 0;
+        }
+        
+        .envelope:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            border-bottom: 80px solid #fce4ed;
+            border-left: 80px solid transparent;
+            width: 0;
+        }
+        
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8c8dc 0%, #f4a6c6 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 1s ease;
+        }
+        
+        .welcome-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .invitation-btn {
+            background: white;
+            color: #d14d8b;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .invitation-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+        }
+        
+        .invitation-btn i {
+            margin-right: 10px;
+        }
+        
+        .welcome-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin-bottom: 20px;
+        }
+        
+        .welcome-subtitle {
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            font-size: 1.2rem;
+            max-width: 500px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 640px) {
+            .card-content {
+                padding: 1.5rem;
+            }
+            .title {
+                font-size: 2.5rem;
+            }
+            .xv-circle {
+                width: 6rem;
+                height: 6rem;
+                font-size: 2.5rem;
+            }
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+            .welcome-subtitle {
+                font-size: 1rem;
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center p-4">
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1 class="welcome-title">XV Años</h1>
+        <p class="welcome-subtitle">Neylan Yaretzi te invita a celebrar este momento especial de su vida</p>
+        <button class="invitation-btn" id="openInvitation">
+            <i class="fas fa-envelope-open-text"></i> Abrir Invitación
+        </button>
+    </div>
+    
+    <!-- Confetti animation -->
+    <div id="confetti-container" class="fixed inset-0 overflow-hidden pointer-events-none"></div>
+    
+    <!-- Main invitation card -->
+    <div class="card bg-gradient-to-br from-pink-50 to-pink-100 rounded-2xl overflow-hidden w-full max-w-2xl relative mx-4 hidden" id="invitationCard">
+        <!-- Floral border overlay -->
+        <div class="floral-border absolute inset-0"></div>
+        
+        <!-- Card content -->
+        <div class="relative z-10 p-8 card-content">
+            <!-- Header with crown -->
+            <div class="flex justify-center mb-6">
+                <div class="text-pink-400 text-4xl">
+                    <i class="fas fa-crown"></i>
+                </div>
+            </div>
+            
+            <!-- Title -->
+            <h1 class="dancing-script text-5xl md:text-6xl text-center font-bold text-pink-600 mb-2 title">
+                ¡Estás Invitado!
+            </h1>
+            
+            <!-- XV in a decorative circle -->
+            <div class="flex justify-center mb-8">
+                <div class="w-32 h-32 md:w-40 md:h-40 rounded-full bg-pink-200 border-4 border-pink-300 flex items-center justify-center shadow-inner xv-circle">
+                    <span class="dancing-script text-5xl md:text-6xl font-bold text-pink-600">XV</span>
+                </div>
+            </div>
+            
+            <!-- Birthday girl name -->
+            <div class="text-center mb-4">
+                <h2 class="dancing-script text-3xl md:text-4xl text-pink-700 mb-1">Neylan Yaretzi</h2>
+                <div class="montserrat text-pink-600 italic text-lg px-6 mt-4">
+                    Existen momentos en la vida que imaginamos, soñamos y esperamos, uno de esos momentos ha llegado.
+                     <div> </div>Deseo compartirlo con las personas que siempre están presentes en mi vida... Tu eres una de ellas.
+                </div>
+            </div>
+            
+            <!-- Details -->
+            <div class="bg-white bg-opacity-70 rounded-lg p-6 mb-8 montserrat text-pink-700">
+                <!-- Church section -->
+                <div class="mb-6 pb-4 border-b border-pink-200">
+                    <h3 class="text-xl font-semibold text-pink-600 mb-3 flex items-center">
+                        <i class="fas fa-church text-pink-400 mr-2"></i> Ceremonia Religiosa
+                    </h3>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="mb-3 md:mb-0">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-calendar-day text-pink-400 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">Sábado, 13 de septiembre</div>
+                                    <div class="text-sm text-pink-500">2023</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-pink-400 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">5:00 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="https://maps.app.goo.gl/xPCNrCnowfqcDkky5" target="_blank" class="bg-pink-100 hover:bg-pink-200 text-pink-700 px-4 py-2 rounded-full text-sm font-medium transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i> Ver ubicación
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Salon section -->
+                <div>
+                    <h3 class="text-xl font-semibold text-pink-600 mb-3 flex items-center">
+                        <i class="fas fa-glass-cheers text-pink-400 mr-2"></i> Salón de Eventos
+                    </h3>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="mb-3 md:mb-0">
+                            <div class="flex items-center mb-2">
+                                <i class="fas fa-calendar-day text-pink-400 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">Sábado, 13 de sep</div>
+                                    <div class="text-sm text-pink-500">2025</div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center">
+                                <i class="fas fa-clock text-pink-400 mr-3"></i>
+                                <div>
+                                    <div class="font-semibold">2:30 PM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="https://maps.app.goo.gl/wTomaNSLP5aXkQgr5" target="_blank" class="bg-pink-100 hover:bg-pink-200 text-pink-700 px-4 py-2 rounded-full text-sm font-medium transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-map-marker-alt mr-2"></i> Ver ubicación
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dress code -->
+            <div class="text-center mb-8">
+                <div class="inline-block border-t border-b border-pink-300 py-2 px-4 montserrat text-sm text-pink-600">
+                    <i class="fas fa-tshirt mr-2"></i> Código de vestimenta: Formal
+                </div>
+            </div>
+            
+            <!-- Ribbon corner -->
+            <div class="absolute top-0 right-0 w-24 h-24 overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-8 bg-pink-400 transform rotate-45 translate-y-4 translate-x-8 flex items-center justify-center">
+                    <span class="text-white text-xs montserrat font-bold">XV AÑOS</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Audio element -->
+    <audio id="backgroundMusic" preload="auto">
+        <source src="The Little Mermaid (2023) - Part of Your World (Official Instrumental).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // Create confetti
+        function createConfetti() {
+            const container = document.getElementById('confetti-container');
+            const colors = ['#f8c8dc', '#f4a6c6', '#ffb7d5', '#fce4ed'];
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                confetti.style.animationDelay = Math.random() * 5 + 's';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                
+                container.appendChild(confetti);
+            }
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            createConfetti();
+            
+            const openBtn = document.getElementById('openInvitation');
+            const welcomeScreen = document.getElementById('welcomeScreen');
+            const invitationCard = document.getElementById('invitationCard');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            
+            openBtn.addEventListener('click', function() {
+                // Play background music - with user interaction, this should work now
+                backgroundMusic.play().catch(e => {
+                    console.log("Error playing music:", e);
+                });
+                
+                // Hide welcome screen
+                welcomeScreen.classList.add('hidden');
+                
+                // Show invitation card with a slight delay to ensure smooth transition
+                setTimeout(() => {
+                    invitationCard.classList.remove('hidden');
+                }, 500);
+                
+                // Create more confetti for the reveal
+                createConfetti();
+            });
+        });
+    </script>
+</body>
+</html>
